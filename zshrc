@@ -24,6 +24,7 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HISTVERIFY
 
 bindkey -v
+bindkey -M viins 'jj' vi-cmd-mode
 
 autoload -U promptinit && promptinit
 # use the walters prompt as a default from the built ins
@@ -44,17 +45,20 @@ alias egrep='egrep --color=auto'
 autoload -Uz compinit
 compinit
 
-insert_sudo     () { zle beginning-of-line; zle -U "sudo "         }
-insert_apt      () { zle beginning-of-line; zle -U "sudo apt-get " }
-insert_install  () { zle -U "install "     }
+bindkey "^P" history-beginning-search-backward
+bindkey "^N" history-beginning-search-forward
 
-zle -N insert-sudo      insert_sudo
-zle -N insert-apt       insert_apt
-zle -N insert-install   insert_install
+#insert_sudo     () { zle beginning-of-line; zle -U "sudo "         }
+#insert_apt      () { zle beginning-of-line; zle -U "sudo apt-get " }
+#insert_install  () { zle -U "install "     }
 
-bindkey "^N" insert-install
-bindkey "^k" insert-sudo
-bindkey "^a" insert-apt
+#zle -N insert-sudo      insert_sudo
+#zle -N insert-apt       insert_apt
+#zle -N insert-install   insert_install
+
+#bindkey "^N" insert-install
+#bindkey "^k" insert-sudo
+#bindkey "^a" insert-apt
 
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 alias ll='LANG=C ls -o --group-directories-first'
@@ -65,7 +69,7 @@ pstat() {
   pushd $HOME/PolicyStat
   export DJANGO_SETTINGS_MODULE=pstat.settings
   export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
-  ssh-add $HOME/vault/pstat_keys/*.key
+  ssh-add $HOME/vault/policystat/keys/*.key
   da() {
     pushd $HOME/PolicyStat/pstat
     django-admin.py $@
