@@ -2,6 +2,7 @@ set wildignore+=*.pyc,*.db,env
 map <Leader><TAB> :CtrlP<CR>
 map <Leader>p :b#<CR>
 map <Leader>a :Ack<CR>
+map <Leader>i gi<ESC>zz
 map <F1> <ESC>
 
 set novb
@@ -22,6 +23,7 @@ map N Nzz
 map n nzz
 
 nmap ; :
+
 
 color tir_black
 if has('gui_running')
