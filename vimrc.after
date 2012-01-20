@@ -1,21 +1,16 @@
-set wildignore+=*.pyc,*.db
-map <Leader><TAB> :CommandT<CR>
+set wildignore+=*.pyc,*.db,env
+map <Leader><TAB> :CtrlP<CR>
 map <Leader>p :b#<CR>
 map <Leader>a :Ack<CR>
 map <F1> <ESC>
 
 set novb
 set noeb
-let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+let g:ackprg='ack-grep -H --nocolor --nogroup --column'
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
-let g:syntastic_check_on_open=1
 
-set ts=4
-set sw=4
-set sts=4
-set et
 set showcmd
 
 inoremap jj <Esc>
@@ -29,10 +24,12 @@ map n nzz
 nmap ; :
 
 color tir_black
-if has("gui_running")
+if has('gui_running')
     set background=dark
 else
     set background=light
 endif
 
 au filetype python hi Operator guifg=#FF0000 ctermfg=124
+au filetype * set sw=4 sts=4 ts=4 et
+au filetype python let g:syntastic_check_on_open=1
