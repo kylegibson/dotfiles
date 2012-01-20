@@ -48,23 +48,14 @@ compinit
 bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 
-#insert_sudo     () { zle beginning-of-line; zle -U "sudo "         }
-#insert_apt      () { zle beginning-of-line; zle -U "sudo apt-get " }
-#insert_install  () { zle -U "install "     }
-
-#zle -N insert-sudo      insert_sudo
-#zle -N insert-apt       insert_apt
-#zle -N insert-install   insert_install
-
-#bindkey "^N" insert-install
-#bindkey "^k" insert-sudo
-#bindkey "^a" insert-apt
-
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 alias ll='LANG=C ls -o --group-directories-first'
 export JAVA_HOME=$HOME/java
 export PATH=~/bin:$JAVA_HOME/bin:/home/kyle/.gem/ruby/1.8/bin:$PATH
 pstat() {
+  if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
+      encfs ~/Dropbox/encrypted ~/vault
+  fi
   . $HOME/PolicyStat.env/bin/activate
   pushd $HOME/PolicyStat
   export DJANGO_SETTINGS_MODULE=pstat.settings
@@ -88,9 +79,6 @@ pstat() {
   rt() {
     rm -f $HOME/policystat.test.db
     pushd $HOME/PolicyStat
-    #if [ -e "$1" ]; then
-        # echo pstat/core/implementation/tests/test_upload.py | sed -e 's@/@.@g' -e 's@\.py@@g'
-    #fi
     ./scripts/run_tests.py $@
     popd
   }
