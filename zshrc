@@ -35,6 +35,8 @@ bindkey -M viins 'jj' vi-cmd-mode
 bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 
+. /etc/zsh_command_not_found
+
 autoload -Uz compinit
 compinit
 autoload -U promptinit && promptinit
@@ -71,7 +73,7 @@ function pstat {
   function rt {
     rm -f $HOME/policystat.test.db
     pushd $HOME/PolicyStat
-    ./scripts/run_tests.py $@
+    $(pwd)/scripts/run_tests.py --django-sqlite $@
     popd
   }
   function selenium {
@@ -96,3 +98,6 @@ zle -N zle-line-init
 zle -N zle-keymap-select
 
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
+if [ "$TERM" != "screen" ]; then
+    screen
+fi
