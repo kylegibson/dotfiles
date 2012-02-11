@@ -31,7 +31,7 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HISTVERIFY
 
 bindkey -v
-bindkey -M viins 'jj' vi-cmd-mode
+bindkey -M viins 'zz' vi-cmd-mode
 bindkey "^P" history-beginning-search-backward
 bindkey "^N" history-beginning-search-forward
 
@@ -89,13 +89,13 @@ function pstat {
   }
 }
 
-function zle-line-init zle-keymap-select {
-    RPS1="${${KEYMAP/vicmd/-- COMMAND --}/(main|viins)/-- INSERT --}"
-    RPS2=$RPS1
-    zle reset-prompt
-}
-zle -N zle-line-init
-zle -N zle-keymap-select
+#function zle-line-init zle-keymap-select {
+    #RPS1="${${KEYMAP/vicmd/-- COMMAND --}/(main|viins)/-- INSERT --}"
+    #RPS2=$RPS1
+    #zle reset-prompt
+#}
+#zle -N zle-line-init
+#zle -N zle-keymap-select
 
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 if [ "$TERM" != "screen" ]; then
