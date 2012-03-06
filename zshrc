@@ -53,39 +53,56 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias git=hub
 
-function pstat {
+function unlock {
   if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
       encfs ~/Dropbox/encrypted ~/vault
   fi
+}
+
+function addkeys {
+  unlock
+  ssh-add $HOME/vault/policystat/keys/*.key
+}
+
+function pstat {
+  unlock
   . $HOME/PolicyStat.env/bin/activate
-  pushd $HOME/PolicyStat
+  cd $HOME/PolicyStat
   export DJANGO_SETTINGS_MODULE=pstat.settings
   export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
-  ssh-add $HOME/vault/policystat/keys/*.key
   function da {
-    pushd $HOME/PolicyStat/pstat
+    cd $HOME/PolicyStat/pstat
     django-admin.py $@
-    popd
+    cd -
   }
   function rs {
     da runserver 0.0.0.0:8000 $@
   }
+  function reset_rabbitcache {
+    sudo /etc/init.d/memcached restart
+    sudo /etc/init.d/rabbitmq-server restart
+  }
   function rt {
     rm -f $HOME/policystat.test.db
-    pushd $HOME/PolicyStat
+    cd $HOME/PolicyStat
     $(pwd)/scripts/run_tests.py --django-sqlite $@
-    popd
+    cd -
   }
   function selenium {
-    pushd $HOME/PolicyStat
-    ./scripts/run_selenium_tests.py $@
-    popd
+    cd $HOME/PolicyStat
+    $(pwd)/scripts/run_selenium_tests.py $@
+    cd -
+  }
+  function celery {
+    da celeryd -Q celery_$1 -l DEBUG
+  }
+  function rt_multi {
+    rt --multiprocess $@
   }
   function workoff {
-    popd
+    cd -
     deactivate
-    unset da rt rs
-    ssh-add -D
+    unset da rt rs selenium
   }
 }
 
@@ -101,3 +118,9 @@ function pstat {
 if [ "$TERM" != "screen" ]; then
     screen
 fi
+
+function preexec {
+  title=$(echo $1 | cut -c1-20)
+  echo -ne "\ek$title\e\\"
+}
+
