@@ -59,68 +59,15 @@ function unlock {
   fi
 }
 
-function addkeys {
-  unlock
-  ssh-add $HOME/vault/policystat/keys/*.key
-}
-
-function pstat {
-  unlock
-  . $HOME/PolicyStat.env/bin/activate
-  cd $HOME/PolicyStat
-  export DJANGO_SETTINGS_MODULE=pstat.settings
-  export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
-  function da {
-    cd $HOME/PolicyStat/pstat
-    django-admin.py $@
-    cd -
-  }
-  function rs {
-    da runserver 0.0.0.0:8000 $@
-  }
-  function reset_rabbitcache {
-    sudo /etc/init.d/memcached restart
-    sudo /etc/init.d/rabbitmq-server restart
-  }
-  function rt {
-    rm -f $HOME/policystat.test.db
-    cd $HOME/PolicyStat
-    $(pwd)/scripts/run_tests.py --django-sqlite $@
-    cd -
-  }
-  function selenium {
-    cd $HOME/PolicyStat
-    $(pwd)/scripts/run_selenium_tests.py $@
-    cd -
-  }
-  function celery {
-    da celeryd -Q celery_$1 -l DEBUG
-  }
-  function rt_multi {
-    rt --multiprocess $@
-  }
-  function workoff {
-    cd -
-    deactivate
-    unset da rt rs selenium
-  }
-}
-
-#function zle-line-init zle-keymap-select {
-    #RPS1="${${KEYMAP/vicmd/-- COMMAND --}/(main|viins)/-- INSERT --}"
-    #RPS2=$RPS1
-    #zle reset-prompt
-#}
-#zle -N zle-line-init
-#zle -N zle-keymap-select
-
-[[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 if [ "$TERM" != "screen" ]; then
     screen
+else
+    function preexec {
+      title=$(echo $1 | cut -c1-20)
+      echo -ne "\ek$title\e\\"
+    }
 fi
 
-function preexec {
-  title=$(echo $1 | cut -c1-20)
-  echo -ne "\ek$title\e\\"
-}
+source ~/.zshrc.policystat
 
+[[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc

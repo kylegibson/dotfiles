@@ -1,0 +1,46 @@
+function pstat {
+  unlock
+  . $HOME/PolicyStat.env/bin/activate
+  cd $HOME/PolicyStat
+  export DJANGO_SETTINGS_MODULE=pstat.settings
+  export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
+  function da {
+    cd $HOME/PolicyStat/pstat
+    django-admin.py $@
+    cd -
+  }
+  function rs {
+    da runserver 0.0.0.0:8000 $@
+  }
+  function reset_rabbitcache {
+    sudo /etc/init.d/memcached restart
+    sudo /etc/init.d/rabbitmq-server restart
+  }
+  function rt {
+    rm -f $HOME/policystat.test.db
+    cd $HOME/PolicyStat
+    $(pwd)/scripts/run_tests.py --django-sqlite $@
+    cd -
+  }
+  function selenium {
+    cd $HOME/PolicyStat
+    $(pwd)/scripts/run_selenium_tests.py $@
+    cd -
+  }
+  function celery {
+    da celeryd -Q celery_$1 -l DEBUG
+  }
+  function rt_multi {
+    rt --multiprocess $@
+  }
+  function workoff {
+    cd -
+    deactivate
+    unset da rt rs selenium
+  }
+  function rotate_celery_medium_log {
+    ssh $1 sudo cp /var/log/celery/celeryd_medium.log{,-$(date +%s)}
+    ssh $1 sudo truncate -s0 /var/log/celery/celeryd_medium.log
+  }
+}
+
