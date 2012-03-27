@@ -37,9 +37,12 @@ bindkey "^N" history-beginning-search-forward
 
 . /etc/zsh_command_not_found
 
+fpath=(~/.zsh.d/functions $fpath)
+
 autoload -U colors
 autoload -U promptinit
 autoload -Uz vcs_info
+autoload pstat unlock
 colors
 promptinit
 
@@ -77,12 +80,6 @@ alias commit='g ci'
 alias pull='g pull'
 alias stash='g stash'
 
-function unlock {
-  if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
-      encfs ~/Dropbox/encrypted ~/vault
-  fi
-}
-
 if [ "$TERM" != "screen" ]; then
     screen
 else
@@ -91,7 +88,5 @@ else
       echo -ne "\ek$title\e\\"
     }
 fi
-
-source ~/.zshrc.policystat
 
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc

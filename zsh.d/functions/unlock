@@ -1,0 +1,3 @@
+  if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
+      encfs ~/Dropbox/encrypted ~/vault
+  fi

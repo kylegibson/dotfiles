@@ -1,4 +1,3 @@
-function pstat {
   unlock
   source $HOME/env/policystat.current/bin/activate
   cd $HOME/PolicyStat
@@ -69,5 +68,3 @@ function pstat {
     ssh $1 sudo cp /var/log/celery/celeryd_$2.log{,-$(date +%s)}
     ssh $1 sudo truncate -s0 /var/log/celery/celeryd_$2.log
   }
-}
-
