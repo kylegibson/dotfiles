@@ -1,0 +1,5 @@
+if [ -z "$1" ]; then
+  source $(pwd)/bin/activate
+else
+  source $1/bin/activate
+fi

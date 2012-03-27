@@ -42,7 +42,7 @@ fpath=(~/.zsh.d/functions $fpath)
 autoload -U colors
 autoload -U promptinit
 autoload -Uz vcs_info
-autoload pstat unlock
+autoload pstat unlock activate
 colors
 promptinit
 
