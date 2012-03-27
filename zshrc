@@ -23,7 +23,7 @@ export PATH JAVA_HOME GREP_COLOR GREP_OPTIONS TERM EDITOR PAGER
 export RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM
 export PATH HISTFILE HISTSIZE SAVEHIST REPORTTIME LS_COLORS ZLS_COLORS
 
-setopt promptsubst
+setopt prompt_subst # Allow functions in prompt
 setopt autocd autopushd pushdignoredups
 setopt SHARE_HISTORY
 setopt EXTENDED_HISTORY
@@ -37,12 +37,30 @@ bindkey "^N" history-beginning-search-forward
 
 . /etc/zsh_command_not_found
 
-autoload -Uz compinit
-compinit
-autoload -U promptinit && promptinit
-# use the walters prompt as a default from the built ins
-# to view others use: prompt <tab>
-prompt clint
+autoload -U colors
+autoload -U promptinit
+autoload -Uz vcs_info
+colors
+promptinit
+
+PROMPT=$'%{${fg[red]}%}<%{${fg[green]}%}%m%{${fg[red]}%}> %{${fg[cyan]}%}%B%~%b%{${fg[default]}%} %20(l.\n.)%(?..[%?])> '
+
+zstyle ':vcs_info:*' actionformats \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+zstyle ':vcs_info:*' formats       \
+    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+
+zstyle ':vcs_info:*' enable git
+
+# or use pre_cmd, see man zshcontrib
+vcs_info_wrapper() {
+  vcs_info
+  if [ -n "$vcs_info_msg_0_" ]; then
+    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+  fi
+}
+RPROMPT=$'$(vcs_info_wrapper)'
 
 zstyle :compinstall filename '/home/kyle/.zshrc'
 
@@ -52,6 +70,12 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias git=hub
+alias g=git
+alias gs='g st'
+alias gd='g diff'
+alias commit='g ci'
+alias pull='g pull'
+alias stash='g stash'
 
 function unlock {
   if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
