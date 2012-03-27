@@ -1,9 +1,31 @@
 function pstat {
   unlock
-  . $HOME/PolicyStat.env/bin/activate
+  source $HOME/env/policystat.current/bin/activate
   cd $HOME/PolicyStat
   export DJANGO_SETTINGS_MODULE=pstat.settings
   export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
+  function co {
+    current=$HOME/env/policystat.current
+    g co $@
+    if [ "$?" -ne 0 ]; then
+        echo 'checkout requires branch'
+        return
+    fi
+    env=policystat.$(git symbolic-ref -q HEAD | cut -d"/" -f 3)
+    if [ ! -e "$HOME/env/$env" ]; then
+        env=policystat.master
+    fi
+    if [ "$(readlink $current)" != "$env" ]; then
+        deactivate
+        rm $current
+        ln -sf $env $current
+        source $current/bin/activate
+        echo Activated env $env
+    fi
+  }
+  function master {
+    co master
+  }
   function da {
     cd $HOME/PolicyStat/pstat
     django-admin.py $@
@@ -19,10 +41,15 @@ function pstat {
   function rt {
     rm -f $HOME/policystat.test.db
     cd $HOME/PolicyStat
-    $(pwd)/scripts/run_tests.py --django-sqlite $@
+    opts=(--exclude 'selenium*' --exclude 'dynamic_ldap.*' --django-sqlite)
+    $(pwd)/scripts/run_tests.py $opts $@
     cd -
   }
+  function rt_pro {
+    rt --with-progressive $@
+  }
   function selenium {
+    echo 'drop database test_dev;' | mysql -u root 2>/dev/null
     cd $HOME/PolicyStat
     $(pwd)/scripts/run_selenium_tests.py $@
     cd -
@@ -38,9 +65,9 @@ function pstat {
     deactivate
     unset da rt rs selenium
   }
-  function rotate_celery_medium_log {
-    ssh $1 sudo cp /var/log/celery/celeryd_medium.log{,-$(date +%s)}
-    ssh $1 sudo truncate -s0 /var/log/celery/celeryd_medium.log
+  function rotate_celery_log {
+    ssh $1 sudo cp /var/log/celery/celeryd_$2.log{,-$(date +%s)}
+    ssh $1 sudo truncate -s0 /var/log/celery/celeryd_$2.log
   }
 }
 
