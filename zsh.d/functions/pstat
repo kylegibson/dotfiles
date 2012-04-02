@@ -40,12 +40,9 @@
   function rt {
     rm -f $HOME/policystat.test.db
     cd $HOME/PolicyStat
-    opts=(--exclude 'selenium*' --exclude 'dynamic_ldap.*' --django-sqlite)
+    opts=(--exclude 'selenium*' --with-progressive --exclude 'dynamic_ldap.*' --django-sqlite)
     $(pwd)/scripts/run_tests.py $opts $@
     cd -
-  }
-  function rt_pro {
-    rt --with-progressive $@
   }
   function selenium {
     echo 'drop database test_dev;' | mysql -u root 2>/dev/null
