@@ -12,6 +12,7 @@ let g:ackprg='ack-grep -H --nocolor --nogroup --column'
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
+let g:syntastic_python_checker='flake8'
 
 set showcmd
 
