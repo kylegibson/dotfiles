@@ -1,29 +1,33 @@
   unlock
-  source $HOME/env/policystat.current/bin/activate
-  cd $HOME/PolicyStat
+  source $HOME/env/policystat/current/bin/activate
+  cd $HOME/PolicyStat$1
   export DJANGO_SETTINGS_MODULE=pstat.settings
   export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
   function co {
-    current=$HOME/env/policystat.current
+    current=$HOME/env/policystat/current
     g co $@
     if [ "$?" -ne 0 ]; then
         echo 'checkout requires branch'
         return
     fi
-    env=policystat.$(git symbolic-ref -q HEAD | cut -d"/" -f 3)
-    if [ ! -e "$HOME/env/$env" ]; then
-        env=policystat.master
+    env=$(git symbolic-ref -q HEAD | cut -d"/" -f 3)
+    if [ ! -e "$HOME/env/policystat/$env" ]; then
+        env=master
     fi
     if [ "$(readlink $current)" != "$env" ]; then
         deactivate
         rm $current
-        ln -sf $env $current
+        ln -nsf $env $current
         source $current/bin/activate
         echo Activated env $env
     fi
   }
   function master {
     co master
+  }
+  function rebuild_db {
+    echo 'drop database dev; CREATE DATABASE `dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root 2>/dev/null
+    zcat ~/backup.sql.gz | mysql -u root dev
   }
   function da {
     cd $HOME/PolicyStat/pstat
