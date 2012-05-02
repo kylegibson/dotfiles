@@ -44,7 +44,7 @@
   function rt {
     rm -f $HOME/policystat.test.db
     cd $HOME/PolicyStat
-    opts=(--exclude 'selenium*' --with-progressive --exclude 'dynamic_ldap.*' --django-sqlite)
+    opts=(--exclude 'selenium*' --with-progressive --django-sqlite)
     $(pwd)/scripts/run_tests.py $opts $@
     cd -
   }
