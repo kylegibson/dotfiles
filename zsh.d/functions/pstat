@@ -1,6 +1,7 @@
   unlock
   source $HOME/env/policystat/current/bin/activate
   cd $HOME/PolicyStat$1
+  export REPO=$(pwd)
   export DJANGO_SETTINGS_MODULE=pstat.settings
   export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
   function co {
@@ -21,6 +22,15 @@
         source $current/bin/activate
         echo Activated env $env
     fi
+  }
+  function disable_pre_commit {
+    chmod -x $REPO/.git/hooks/pre-commit
+  }
+  function enable_pre_commit {
+    chmod +x $REPO/.git/hooks/pre-commit
+  }
+  function delete_remote_branch {
+    g push origin :$1
   }
   function master {
     co master
