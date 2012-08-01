@@ -82,7 +82,12 @@ alias pull='g pull'
 alias stash='g stash'
 
 if [ "$TERM" != "screen" ]; then
-    screen && exit
+    screen
+    if [ ! -e '/tmp/noexit' ]; then
+        exit
+    else
+        rm /tmp/noexit
+    fi
 else
     function preexec {
       title=$(echo $1 | cut -c1-20)
