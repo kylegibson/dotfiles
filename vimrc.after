@@ -11,6 +11,10 @@ let g:ackprg='ack-grep -H --nocolor --nogroup --column'
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
 let g:syntastic_python_checker='flake8'
+let g:buffergator_display_regime='bufname'
+let g:buffergator_sort_regime='mru'
+
+"let g:ctrlp_user_command = 'find %s -type f -o -type l'
 
 set showcmd
 
@@ -36,3 +40,5 @@ au filetype python hi Operator guifg=#FF0000 ctermfg=124
 au filetype * set sw=4 sts=4 ts=4 et
 au filetype python let g:syntastic_check_on_open=1
 au filetype javascript let g:syntastic_check_on_open=1
+" Prevent txt files from being treated as markdown
+au BufRead *.txt set ft=

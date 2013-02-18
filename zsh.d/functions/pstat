@@ -1,28 +1,6 @@
-  unlock
-  source $HOME/env/policystat/current/bin/activate
-  cd $HOME/PolicyStat$1
+  unlock || exit
+  cd $HOME/PolicyStat
   export REPO=$(pwd)
-  export DJANGO_SETTINGS_MODULE=pstat.settings
-  export PYTHONPATH=$(pwd):$(pwd)/pstat:$PYTHONPATH
-  function co {
-    current=$HOME/env/policystat/current
-    g co $@
-    if [ "$?" -ne 0 ]; then
-        echo 'checkout requires branch'
-        return
-    fi
-    env=$(git symbolic-ref -q HEAD | cut -d"/" -f 3)
-    if [ ! -e "$HOME/env/policystat/$env" ]; then
-        env=master
-    fi
-    if [ "$(readlink $current)" != "$env" ]; then
-        deactivate
-        rm $current
-        ln -nsf $env $current
-        source $current/bin/activate
-        echo Activated env $env
-    fi
-  }
   function disable_pre_commit {
     chmod -x $REPO/.git/hooks/pre-commit
   }
@@ -32,50 +10,34 @@
   function delete_remote_branch {
     g push origin :$1
   }
-  function master {
-    co master
-  }
-  function rebuild_db {
+  function load_customer_data {
     echo 'drop database dev; CREATE DATABASE `dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root 2>/dev/null
     zcat ~/backup.sql.gz | mysql -u root dev
   }
-  function da {
-    cd $HOME/PolicyStat/pstat
-    django-admin.py $@
-    cd -
+
+  function dev {
+      ssh devenv -t "$@"
   }
-  function rs {
-    da runserver 0.0.0.0:8000 $@
-  }
-  function reset_rabbitcache {
-    sudo /etc/init.d/memcached restart
-    sudo /etc/init.d/rabbitmq-server restart
-  }
+
   function rt {
-    rm -f $HOME/policystat.test.db
-    cd $HOME/PolicyStat
-    opts=(--exclude 'selenium*' --with-progressive --django-sqlite)
-    $(pwd)/scripts/run_tests.py $opts $@
-    cd -
+      dev rt $@
   }
+
   function selenium {
-    echo 'drop database test_dev;' | mysql -u root 2>/dev/null
-    cd $HOME/PolicyStat
-    $(pwd)/scripts/run_selenium_tests.py $@
-    cd -
+      dev selenium $@
   }
+
+  function migrate {
+      dev django-admin.py migrate
+  }
+
   function celery {
-    da celeryd -Q celery_$1 -l DEBUG
+    dev django-admin.py celeryd -Q celery_$1 -l DEBUG
   }
-  function rt_multi {
-    rt --multiprocess $@
+
+  function shell_plus {
+    dev django-admin.py shell_plus
   }
-  function workoff {
-    cd -
-    deactivate
-    unset da rt rs selenium
-  }
-  function rotate_celery_log {
-    ssh $1 sudo cp /var/log/celery/celeryd_$2.log{,-$(date +%s)}
-    ssh $1 sudo truncate -s0 /var/log/celery/celeryd_$2.log
-  }
+
+  complete -o nospace -F _nosetests rt
+  complete -o nospace -F _nosetests selenium

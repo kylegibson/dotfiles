@@ -15,7 +15,7 @@ GREP_OPTIONS='--color=auto'
 GREP_COLOR='7;31'
 
 JAVA_HOME=$HOME/java
-PATH=~/bin:$JAVA_HOME/bin:/home/kyle/.gem/ruby/1.8/bin:$PATH
+PATH=~/bin:$JAVA_HOME/bin:/home/dev/.gem/ruby/1.8/bin:$PATH
 LS_COLORS='no=0:fi=0:di=1;34:ln=1;36:pi=40;33:so=1;35:do=1;35:bd=40;33;1:cd=40;33;1:or=40;31;1:ex=1;32:*.tar=1;31:*.tgz=1;31:*.arj=1;31:*.taz=1;31:*.lzh=1;31:*.zip=1;31:*.rar=1;31:*.z=1;31:*.Z=1;31:*.gz=1;31:*.bz2=1;31:*.tbz2=1;31:*.deb=1;31:*.pdf=1;31:*.jpg=1;35:*.jpeg=1;35:*.gif=1;35:*.bmp=1;35:*.pbm=1;35:*.pgm=1;35:*.ppm=1;35:*.pnm=1;35:*.tga=1;35:*.xbm=1;35:*.xpm=1;35:*.tif=1;35:*.tiff=1;35:*.png=1;35:*.mpg=1;35:*.mpeg=1;35:*.mov=1;35:*.avi=1;35:*.wmv=1;35:*.ogg=1;35:*.mp3=1;35:*.mpc=1;35:*.wav=1;35:*.au=1;35:*.swp=1;30:*.pl=36:*.c=36:*.cc=36:*.h=36:*.core=1;33;41:*.gpg=1;33:'
 ZLS_COLORS="$LS_COLORS"
 
@@ -24,12 +24,37 @@ export RSYNC_RSH CVSROOT FIGNORE DISPLAY NNTPSERVER COLORTERM
 export PATH HISTFILE HISTSIZE SAVEHIST REPORTTIME LS_COLORS ZLS_COLORS
 export PYTHONSTARTUP=$HOME/.pythonrc
 
-setopt prompt_subst # Allow functions in prompt
-setopt autocd autopushd pushdignoredups
+# Allow functions in prompt
+setopt prompt_subst
+# Make cd push the old directory onto the directory stack.
+setopt autopushd
+# Don’t push multiple copies of the same directory onto the directory stack.
+setopt PUSHD_IGNORE_DUPS
+# Do not print the directory stack after pushd or popd.
+setopt PUSHD_SILENT
+# Do not enter command lines into the history list if they are duplicates of
+# the previous event.
+setopt HIST_IGNORE_DUPS
+# Remove command lines from the history list when the first character on the
+# line is a space, or when one of the expanded aliases contains a leading
+# space.
+setopt HIST_IGNORE_SPACE
+# N/A
 setopt SHARE_HISTORY
+# Save each command’s beginning timestamp (in seconds since the epoch) and the
+# duration (in seconds) to the history file.
 setopt EXTENDED_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
-setopt HISTVERIFY
+
+setopt CORRECT
+setopt INTERACTIVE_COMMENTS
+# Allow the character sequence '' to signify a single quote within singly
+# quoted strings.
+setopt RC_QUOTES
+
+# Whenever the user enters a line with history expansion, don’t execute the line
+# directly; instead, perform history expansion and reload the line into the
+# editing buffer.
+setopt HIST_VERIFY
 
 bindkey -v
 bindkey -M viins 'zz' vi-cmd-mode
@@ -44,6 +69,10 @@ autoload -U colors
 autoload -U promptinit
 autoload -Uz vcs_info
 autoload pstat unlock activate
+autoload -U compinit
+autoload -U bashcompinit
+compinit
+bashcompinit
 colors
 promptinit
 
@@ -66,27 +95,28 @@ vcs_info_wrapper() {
 }
 RPROMPT=$'$(vcs_info_wrapper)'
 
-zstyle :compinstall filename '/home/kyle/.zshrc'
+zstyle :compinstall filename '/home/dev/.zshrc'
 
 alias ls='ls --color=always'
 alias ll='LANG=C ls -o --group-directories-first'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias git=hub
+#alias git=hub
 alias g=git
 alias gs='g st'
 alias gd='g diff'
 alias commit='g ci'
 alias pull='g pull'
 alias stash='g stash'
+alias master='g co master'
 
 if [ "$TERM" != "screen" ]; then
-    screen
-    if [ ! -e '/tmp/noexit' ]; then
-        exit
+    detached=$(screen -ls | grep Detached | cut -f2)
+    if [ -n "$detached" ]; then
+        screen -r "$detached"
     else
-        rm /tmp/noexit
+        screen
     fi
 else
     function preexec {
@@ -96,3 +126,18 @@ else
 fi
 
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
+
+PATH=$PATH:$HOME/.rvm/bin
+
+_nosetests()
+{
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  COMPREPLY=(`$HOME/.python/bin/nosecomplete ${cur} 2>/dev/null`)
+}
+complete -o nospace -F _nosetests nosetests
+
+
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+source ~/.python/bin/activate
