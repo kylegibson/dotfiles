@@ -1,5 +1,15 @@
-if [ -z "$1" ]; then
-  source $(pwd)/bin/activate
-else
-  source $1/bin/activate
+if [ ! -z "$1" ]; then
+  if [ -f "$1" ]; then
+    source "$1"
+    return
+  fi
+  if [ -f "$1/bin/activate" ]; then
+    source "$1/bin/activate"
+    return
+  fi
 fi
+if [ -f "env/bin/activate" ]; then
+   source "env/bin/activate"
+   return
+fi
+echo "Activation failed"
