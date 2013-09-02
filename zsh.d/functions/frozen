@@ -1,0 +1,3 @@
+cd $HOME/dev/www.frozenonline.com
+export DJANGO_SETTINGS_MODULE=frozen.settings
+activate
