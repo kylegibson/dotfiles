@@ -68,7 +68,10 @@ fpath=(~/.zsh.d/functions $fpath)
 autoload -U colors
 autoload -U promptinit
 autoload -Uz vcs_info
-autoload pstat unlock activate
+autoload pstat
+autoload unlock
+autoload activate
+autoload frozen
 autoload -U compinit
 autoload -U bashcompinit
 compinit
