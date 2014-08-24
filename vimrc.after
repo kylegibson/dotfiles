@@ -1,3 +1,4 @@
+set colorcolumn=80
 set wildignore+=*.pyc,*.db,env,user_media
 map <Leader><TAB> :CtrlP<CR>
 map <Leader>p :b#<CR>
