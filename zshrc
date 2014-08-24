@@ -148,5 +148,5 @@ complete -o nospace -F _nosetests nosetests
 
 # Null glob is silent when empty
 for F in $HOME/.zsh.d/secrets/*.sh(N); do
-  source $F
+  test -e $F && source $F
 done
