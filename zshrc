@@ -144,3 +144,8 @@ _nosetests()
   COMPREPLY=($($(which nosecomplete) ${cur} 2>/dev/null))
 }
 complete -o nospace -F _nosetests nosetests
+
+# Null glob is silent when empty
+for F in $HOME/.zsh.d/secrets/*.sh(N); do
+  source $F
+done
