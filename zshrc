@@ -105,7 +105,6 @@ alias ll='LANG=C ls -o --group-directories-first'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-#alias git=hub
 alias g=git
 alias gs='g st'
 alias gd='g diff'
@@ -113,6 +112,8 @@ alias commit='g ci'
 alias pull='g pull'
 alias stash='g stash'
 alias master='g co master'
+alias vup='vagrant up dev --no-provision'
+alias mv='mv -i'
 
 if [ "$TERM" != "screen" ]; then
     detached=$(screen -ls | grep Detached | cut -f2)
