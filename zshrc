@@ -141,6 +141,6 @@ fi
 _nosetests()
 {
   cur="${COMP_WORDS[COMP_CWORD]}"
-  COMPREPLY=(`$HOME/.python/bin/nosecomplete ${cur} 2>/dev/null`)
+  COMPREPLY=($($(which nosecomplete) ${cur} 2>/dev/null))
 }
 complete -o nospace -F _nosetests nosetests
