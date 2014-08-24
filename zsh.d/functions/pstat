@@ -1,4 +1,5 @@
-unlock || exit
+unlock keys || exit
+unlock policystat || exit
 cd $HOME/dev/PolicyStat
 export REPO=$(pwd)
 export PSTAT_DEPLOY=$HOME/vault/policystat/deploy
