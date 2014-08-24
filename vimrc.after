@@ -2,7 +2,6 @@ set colorcolumn=80
 set wildignore+=*.pyc,*.db,env,user_media
 map <Leader><TAB> :CtrlP<CR>
 map <Leader>p :b#<CR>
-map <Leader>i gi<ESC>zz
 map <F1> <ESC>
 
 set novb
@@ -14,8 +13,8 @@ let g:syntastic_auto_loc_list=1
 let g:syntastic_python_checker='flake8'
 let g:buffergator_display_regime='bufname'
 let g:buffergator_sort_regime='mru'
-
-"let g:ctrlp_user_command = 'find %s -type f -o -type l'
+let g:ctags_statusline=1
+let g:ctags_title=1
 
 set showcmd
 
