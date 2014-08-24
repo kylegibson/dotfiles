@@ -129,11 +129,14 @@ else
     }
 fi
 
-[[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
-
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
 
-PATH=$PATH:$HOME/.rvm/bin
+
+export PYENV_ROOT="${HOME}/.pyenv"
+if [ -d "${PYENV_ROOT}" ]; then
+  export PATH="${PYENV_ROOT}/bin:${PATH}"
+  eval "$(pyenv init -)"
+fi
 
 _nosetests()
 {
@@ -141,7 +144,3 @@ _nosetests()
   COMPREPLY=(`$HOME/.python/bin/nosecomplete ${cur} 2>/dev/null`)
 }
 complete -o nospace -F _nosetests nosetests
-
-
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-source ~/.python/bin/activate
