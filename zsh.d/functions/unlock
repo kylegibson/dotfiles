@@ -1,3 +1,10 @@
-  if [ $(find ~/vault -type f | wc -l) -eq 0 ]; then
-      encfs ~/Dropbox/encrypted ~/vault
-  fi
+VAULT=$HOME/vault
+ENCRYPTED=$HOME/Dropbox/encrypted
+
+mount | grep -q "encfs on $VAULT/$1"
+if [ $? -eq 1 ]; then
+  echo Mounting $ENCRYPTED/$1 as $VAULT/$1
+  encfs $ENCRYPTED/$1 $VAULT/$1
+else
+  echo $VAULT/$1 is already mounted
+fi
