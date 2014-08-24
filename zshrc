@@ -70,6 +70,7 @@ autoload -U promptinit
 autoload -Uz vcs_info
 autoload pstat
 autoload unlock
+autoload lock
 autoload activate
 autoload frozen
 autoload -U compinit

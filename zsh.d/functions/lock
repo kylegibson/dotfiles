@@ -1,0 +1,2 @@
+VAULT=$HOME/vault
+fusermount -u $VAULT/$1
