@@ -1,43 +1,47 @@
-  unlock || exit
-  cd $HOME/PolicyStat
-  export REPO=$(pwd)
-  function disable_pre_commit {
-    chmod -x $REPO/.git/hooks/pre-commit
-  }
-  function enable_pre_commit {
-    chmod +x $REPO/.git/hooks/pre-commit
-  }
-  function delete_remote_branch {
-    g push origin :$1
-  }
-  function load_customer_data {
-    echo 'drop database dev; CREATE DATABASE `dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root 2>/dev/null
-    zcat ~/backup.sql.gz | mysql -u root dev
-  }
+unlock || exit
+cd $HOME/dev/PolicyStat
+export REPO=$(pwd)
+export PSTAT_DEPLOY=$HOME/vault/policystat/deploy
+export VAGRANT_VBOX_MEMORY=5000
+export VAGRANT_VBOX_CPU_MAX=1
+export VAGRANT_VBOX_GUI=1
 
-  function dev {
-      ssh devenv -t "$@"
-  }
+function delete_remote_branch {
+  g push origin :$1
+}
+function load_customer_data {
+  echo 'drop database dev; CREATE DATABASE `dev` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;' | mysql -u root 2>/dev/null
+  zcat ~/backup.sql.gz | mysql -u root dev
+}
 
-  function rt {
-      dev rt $@
-  }
+function dev {
+  ssh devenv -t "$@"
+}
 
-  function selenium {
-      dev selenium $@
-  }
+function rt {
+  dev pstat_test $@
+}
 
-  function migrate {
-      dev django-admin.py migrate
-  }
+function rtm {
+  dev pstat_test_mysql $@
+}
 
-  function celery {
-    dev django-admin.py celeryd -Q celery_$1 -l DEBUG
-  }
+function selenium {
+  dev selenium $@
+}
 
-  function shell_plus {
-    dev django-admin.py shell_plus
-  }
+function selenium_new {
+  dev selenium_new $@
+}
 
-  complete -o nospace -F _nosetests rt
-  complete -o nospace -F _nosetests selenium
+function migrate {
+  dev django-admin.py migrate
+}
+
+function shell_plus {
+  dev django-admin.py shell_plus
+}
+
+complete -o nospace -F _nosetests rt
+complete -o nospace -F _nosetests rtm
+complete -o nospace -F _nosetests selenium
