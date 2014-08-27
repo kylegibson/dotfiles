@@ -44,6 +44,12 @@ au filetype haml set sw=4 sts=4 ts=4 et
 " Prevent txt files from being treated as markdown
 au BufRead *.txt set ft=
 
+" Configuration for vim-indent-guides
+" See
+" https://github.com/nathanaelkane/vim-indent-guides/issues/38#issuecomment-14552628
+let g:indent_guides_auto_colors = 0
+hi IndentGuidesOdd  guibg=#333 ctermbg=3
+hi IndentGuidesEven guibg=#666 ctermbg=4
 
 " XML formatter
 function! DoFormatXML() range
