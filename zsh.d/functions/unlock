@@ -1,7 +1,7 @@
 VAULT=$HOME/vault
 ENCRYPTED=$HOME/Dropbox/encrypted
 
-mount | grep -q "encfs on $VAULT/$1"
+mount | grep -qe "^encfs on $VAULT/$1 "
 if [ $? -eq 1 ]; then
   echo Mounting $ENCRYPTED/$1 as $VAULT/$1
   encfs $ENCRYPTED/$1 $VAULT/$1

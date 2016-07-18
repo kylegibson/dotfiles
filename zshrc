@@ -116,7 +116,7 @@ alias master='g co master'
 alias vup='vagrant up dev --no-provision'
 alias mv='mv -i'
 
-if [ "$TERM" != "screen" ]; then
+if [ "$TERM" != "screen" -a "$TERM" != "screen.linux" ]; then
     detached=$(screen -ls | grep Detached | cut -f2)
     if [ -n "$detached" ]; then
         screen -r "$detached"
@@ -145,6 +145,8 @@ _nosetests()
   COMPREPLY=($($(which nosecomplete) ${cur} 2>/dev/null))
 }
 complete -o nospace -F _nosetests nosetests
+
+complete -o nospace -F _nosetests tox
 
 # Null glob is silent when empty
 for F in $HOME/.zsh.d/secrets/*.sh(N); do

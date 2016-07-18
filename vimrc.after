@@ -10,11 +10,17 @@ let g:ackprg='ack-grep -H --nocolor --nogroup --column'
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
-let g:syntastic_python_checker='flake8'
+" let g:syntastic_python_checker='flake8'
 let g:buffergator_display_regime='bufname'
 let g:buffergator_sort_regime='mru'
 let g:ctags_statusline=1
 let g:ctags_title=1
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['.ctrlpignore', 'find %s -type f | grep -vZf .ctrlpignore'],
+    \ },
+  \ 'fallback': 'find %s -type f'
+\ }
 
 set showcmd
 
@@ -47,11 +53,12 @@ au BufRead *.txt set ft=
 " Configuration for vim-indent-guides
 " See
 " https://github.com/nathanaelkane/vim-indent-guides/issues/38#issuecomment-14552628
-let g:indent_guides_auto_colors = 0
-hi IndentGuidesOdd  guibg=#333 ctermbg=3
-hi IndentGuidesEven guibg=#666 ctermbg=4
+" let g:indent_guides_auto_colors = 0
+" hi IndentGuidesOdd  guibg=#111 ctermbg=3
+" hi IndentGuidesEven guibg=#222 ctermbg=4
 
 " XML formatter
+" sudo apt-get install libxml2-utils
 function! DoFormatXML() range
   " Save the file type
   let l:origft = &ft
