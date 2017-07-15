@@ -113,7 +113,7 @@ alias commit='g ci'
 alias pull='g pull'
 alias stash='g stash'
 alias master='g co master'
-alias vup='vagrant up dev --no-provision'
+alias vup='vagrant up'
 alias mv='mv -i'
 
 if [ "$TERM" != "screen" -a "$TERM" != "screen.linux" ]; then
