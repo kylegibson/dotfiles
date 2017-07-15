@@ -6,7 +6,7 @@ export PSTAT_DEPLOY=$HOME/vault/policystat/deploy
 export PSTAT_PGP_SECRET_KEY_ID=78E1478E
 export VAGRANT_VBOX_MEMORY=5000
 export VAGRANT_VBOX_CPU_MAX=1
-export VAGRANT_VBOX_GUI=1
+# export VAGRANT_VBOX_GUI=1
 
 function delete_remote_branch {
   g push origin :$1
