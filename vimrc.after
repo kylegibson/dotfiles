@@ -15,12 +15,6 @@ let g:buffergator_display_regime='bufname'
 let g:buffergator_sort_regime='mru'
 let g:ctags_statusline=1
 let g:ctags_title=1
-let g:ctrlp_user_command = {
-  \ 'types': {
-    \ 1: ['.ctrlpignore', 'find %s -type f | grep -vZf .ctrlpignore'],
-    \ },
-  \ 'fallback': 'find %s -type f'
-\ }
 
 set showcmd
 
