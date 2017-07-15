@@ -152,3 +152,7 @@ complete -o nospace -F _nosetests tox
 for F in $HOME/.zsh.d/secrets/*.sh(N); do
   test -e $F && source $F
 done
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
