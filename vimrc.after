@@ -45,7 +45,6 @@ else
 endif
 
 au filetype python hi Operator guifg=#FF0000 ctermfg=124
-au filetype python let g:syntastic_check_on_open=1
 au filetype javascript set sw=4 sts=4 ts=4 et
 au filetype javascript let g:syntastic_check_on_open=1
 au filetype haml set sw=4 sts=4 ts=4 et
