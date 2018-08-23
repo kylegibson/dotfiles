@@ -11,7 +11,6 @@ FIGNORE='.o:.out:~'
 DISPLAY=:0.0
 
 # output colored grep
-GREP_OPTIONS='--color=auto'
 GREP_COLOR='7;31'
 
 JAVA_HOME=$HOME/java
