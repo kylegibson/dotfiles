@@ -128,3 +128,4 @@ done
 export PATH="/usr/local/heroku/bin:$PATH"
 
 source $(which virtualenvwrapper.sh)
+eval "$(direnv hook zsh)"
