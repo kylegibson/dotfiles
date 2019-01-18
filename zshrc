@@ -62,39 +62,15 @@ bindkey "^N" history-beginning-search-forward
 
 fpath=(~/.zsh.d/functions $fpath)
 
-autoload -U colors
-autoload -U promptinit
-autoload -Uz vcs_info
-autoload pstat
 autoload unlock
 autoload lock
 autoload activate
-autoload frozen
-autoload -U compinit
-autoload -U bashcompinit
-compinit
-bashcompinit
-colors
-promptinit
+autoload -U bashcompinit; bashcompinit
+autoload -U colors; colors
+autoload -U compinit; compinit
+autoload -U promptinit; promptinit
 
-PROMPT=$'%{${fg[red]}%}<%{${fg[green]}%}%m%{${fg[red]}%}> %{${fg[cyan]}%}%B%~%b%{${fg[default]}%} %20(l.\n.)%(?..[%?])> '
-
-zstyle ':vcs_info:*' actionformats \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats       \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-
-zstyle ':vcs_info:*' enable git
-
-# or use pre_cmd, see man zshcontrib
-vcs_info_wrapper() {
-  vcs_info
-  if [ -n "$vcs_info_msg_0_" ]; then
-    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
-  fi
-}
-RPROMPT=$'$(vcs_info_wrapper)'
+prompt pure
 
 zstyle :compinstall filename $HOME/.zshrc
 
