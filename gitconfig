@@ -39,6 +39,6 @@
 [hub]
 	protocol = git
 [push]
-	default = current
+	default = simple
 [gc]
 	auto = 1
