@@ -115,17 +115,11 @@ _nosetests()
   COMPREPLY=($($(which nosecomplete) ${cur} 2>/dev/null))
 }
 complete -o nospace -F _nosetests nosetests
-
 complete -o nospace -F _nosetests tox
 
-# Null glob is silent when empty
-for F in $HOME/.zsh.d/secrets/*.sh(N); do
-  test -e $F && source $F
-done
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
-source $(which virtualenvwrapper.sh)
 eval "$(direnv hook zsh)"
