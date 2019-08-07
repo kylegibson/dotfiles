@@ -24,10 +24,12 @@
   excludesfile = /home/kyle/.gitignore
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [alias]
+  co = checkout
   st = status
   ci = commit
+  fop = fetch origin --prune
+
   br = branch
-  co = checkout
   df = diff
   dc = diff --cached
   lg = log -p
