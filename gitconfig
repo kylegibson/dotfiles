@@ -28,8 +28,10 @@
   st = status
   ci = commit
   fop = fetch origin --prune
+  mom = merge origin/master
 
   br = branch
+  co = checkout
   df = diff
   dc = diff --cached
   lg = log -p
