@@ -91,18 +91,18 @@ alias vs='vagrant status'
 alias vr='vagrant run'
 alias mv='mv -i'
 
-if [ "$TERM" != "screen" -a "$TERM" != "screen.linux" ]; then
+if [[ "$TERM" == screen* ]]; then
+    function preexec {
+      title=$(echo $1 | cut -c1-20)
+      echo -ne "\ek$title\e\\"
+    }
+else
     detached=$(screen -ls | grep Detached | cut -f2)
     if [ -n "$detached" ]; then
         screen -r "$detached"
     else
         screen
     fi
-else
-    function preexec {
-      title=$(echo $1 | cut -c1-20)
-      echo -ne "\ek$title\e\\"
-    }
 fi
 
 export PYENV_ROOT="${HOME}/.pyenv"
