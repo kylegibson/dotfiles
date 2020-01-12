@@ -89,6 +89,7 @@ alias master='git checkout master'
 alias vu='vagrant up'
 alias vs='vagrant status'
 alias vr='vagrant run'
+alias vtest='vagrant run test'
 alias mv='mv -i'
 
 if [[ "$TERM" == screen* ]]; then
@@ -111,13 +112,13 @@ if [ -d "${PYENV_ROOT}" ]; then
   eval "$(pyenv init -)"
 fi
 
-_nosetests()
+_nosecomplete()
 {
   cur="${COMP_WORDS[COMP_CWORD]}"
-  COMPREPLY=($($(which nosecomplete) ${cur} 2>/dev/null))
+  COMPREPLY=($($(which nosecomplete) ${cur}))
 }
-complete -o nospace -F _nosetests nosetests
-complete -o nospace -F _nosetests tox
+setopt complete_aliases
+complete -o nospace -F _nosecomplete vtest
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
